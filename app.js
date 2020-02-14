@@ -4,8 +4,9 @@ const mongoose = require('mongoose');
 const helmet = require('helmet');
 const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
-const limiter = require('./rate_limiter/rate_limiter');
 const { errors } = require('celebrate');
+const limiter = require('./rate_limiter/rate_limiter');
+
 require('dotenv').config();
 
 const { NODE_ENV } = process.env;
