@@ -1,8 +1,10 @@
 // app.js
 const express = require('express');
 const mongoose = require('mongoose');
+const helmet = require('helmet');
 const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
+const limiter = require('./rate_limiter/rate_limiter');
 const { errors } = require('celebrate');
 require('dotenv').config();
 
@@ -31,9 +33,11 @@ mongoose.connect(dataBaseAdress, {
 
 app.use(express.static(`${__dirname}/public`));
 app.use(cookieParser());
+app.use(helmet());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
+app.use(limiter);
 app.use(requestLogger);
 
 app.use(require('./routes/index'));
