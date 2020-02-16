@@ -2,6 +2,7 @@
 const mongoose = require('mongoose');
 const bcrypt = require('bcryptjs');
 const validator = require('validator');
+const FourHundredError = require('../errors/four-hundred-err');
 
 const userSchema = new mongoose.Schema({
   email: {
@@ -23,21 +24,23 @@ const userSchema = new mongoose.Schema({
   },
 });
 
-userSchema.statics.findUserByCredentials = function (email, password) {
+function findUserByCredentialsFunc(email, password) {
   return this.findOne({ email }).select('+password')
     .then((user) => {
       if (!user) {
-        return Promise.reject(new Error('Неправильные почта или пароль'));
+        throw new FourHundredError('Неправильные почта или пароль', 401);
       }
       return bcrypt.compare(password, user.password)
         .then((matched) => {
           if (!matched) {
-            return Promise.reject(new Error('Неправильные почта или пароль'));
+            throw new FourHundredError('Неправильные почта или пароль', 401);
           }
           return user;
         });
     });
-};
+}
+
+userSchema.statics.findUserByCredentials = findUserByCredentialsFunc;
 
 userSchema.path('email').validate((val) => validator.isEmail(val), 'Invalid Email.');
 
