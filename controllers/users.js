@@ -61,6 +61,8 @@ const loginUser = (req, res, next) => {
 };
 
 const signOut = (req, res, next) => {
+  const { NODE_ENV, JWT_SECRET } = process.env;
+  
   const userId = req.user._id;
   User.findById(userId)
     .then((e) => {
