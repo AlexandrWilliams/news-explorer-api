@@ -60,8 +60,28 @@ const loginUser = (req, res, next) => {
     .catch(next);
 };
 
+const signOut = (req, res, next) => {
+  const userId = req.user._id;
+  User.findById(userId)
+    .then((e) => {
+       if (!e) {
+        throw new FourHundredError('401 Cant find user', 401);
+      }
+      const jwtKey = NODE_ENV === 'production' ? JWT_SECRET : 'dev-secret';
+      const token = jwt.sign({ _id: userId }, jwtKey, { expiresIn: '1s' });
+      res.cookie('jwt', token, {
+        maxAge: 0,
+        httpOnly: true,
+      });
+      res.send({ req: true });
+      // .end();
+    })
+    .catch(next);
+};
+
 module.exports = {
   routerUsers,
   loginUser,
   createUser,
+  signOut
 };

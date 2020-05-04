@@ -1,7 +1,7 @@
 // routes/users.js
 const router = require('express').Router();
 const { celebrate, Joi } = require('celebrate');
-const { createUser, loginUser, routerUsers } = require('../controllers/users');
+const { createUser, loginUser, routerUsers, signOut } = require('../controllers/users');
 
 router.post('/signup', celebrate({
   body: Joi.object().keys({
@@ -17,5 +17,10 @@ router.post('/signin', celebrate({
   }).unknown(true),
 }), loginUser);
 router.get('/me', routerUsers);
+router.delete('/me', celebrate({
+  params: Joi.object().keys({
+    articleId: Joi.string().alphanum().length(24),
+  }),
+}), signOut);
 
 module.exports = router;
