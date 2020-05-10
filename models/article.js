@@ -42,7 +42,7 @@ articleSchema.path('link').validate((val) => {
   return urlRegex.test(val);
 }, 'Invalid URL.');
 articleSchema.path('image').validate((val) => {
-  const urlRegex = /^(http(s?):|ftp:)([/|.|\w|\s|-])*\.(?:jpg|gif|png)$/g;
+  const urlRegex = /^(http(s?):|ftp:)([/|.|\w|\s|-])*\.(?:apng|bmp|ico|cur|jpg|jpeg|jfif|pjpeg|pjp||gif|png|tif|tiff|webp|svg|||)$/g;
   return urlRegex.test(val);
 }, 'Invalid URL.');
 
